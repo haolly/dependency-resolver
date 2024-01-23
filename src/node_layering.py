@@ -57,10 +57,10 @@ class Layering:
                 for child_vtx in self.graph.get_neighbors_out(vtx):
                     target_level = self.__node2layer[child_vtx]
                     if abs(target_level - current_layer.level) > 1:
-                        if not vtx in self.dummy_traversing_edges:
+                        if vtx not in self.dummy_traversing_edges:
                             self.dummy_traversing_edges[vtx] = {}
 
-                        if not child_vtx in self.dummy_traversing_edges[vtx]:
+                        if child_vtx not in self.dummy_traversing_edges[vtx]:
                             self.dummy_traversing_edges[vtx][child_vtx] = []
 
                         for layer in range(
@@ -72,10 +72,10 @@ class Layering:
                             self.__layers[layer-1].nodes.append(-1)
                         
     def __str__(self):
-        resp = ""
-        for layer in self.__layers:
-            resp += str(layer.level) + " => " + str(layer.nodes) + "\n"
-        return resp
+        return "".join(
+            f"{str(layer.level)} => {str(layer.nodes)}" + "\n"
+            for layer in self.__layers
+        )
 
     def __repr__(self) -> str:
         return self.__str__()

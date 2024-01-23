@@ -126,13 +126,14 @@ class Resolver():
         self.get_fps()
 
     def get_fps(self):
-        fps = 0
-        if self.dt: fps = 1/self.dt
+        fps = 1/self.dt if self.dt else 0
         if len(self.fps_list) == 50:
                 self.fps_list.pop(0)
         self.fps_list.append(fps)
         avg_fps = sum(self.fps_list) / len(self.fps_list)
-        pygame.display.set_caption('Dependency resolver - FPS: ' + str(round(avg_fps,2)))
+        pygame.display.set_caption(
+            f'Dependency resolver - FPS: {str(round(avg_fps, 2))}'
+        )
 
     def __update(self) -> None:
         self.state_stack[-1].update(self.dt, self.actions)

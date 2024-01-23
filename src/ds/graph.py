@@ -41,9 +41,7 @@ class Graph(ABC):
         Returns index of the new (or existing) vertex.
         """
         v_id = self.get_vertex_id(name)
-        if v_id == -1:
-            return self.add_vertex(name)
-        return v_id
+        return self.add_vertex(name) if v_id == -1 else v_id
 
     def _base_add_vertex(self, name: str) -> int:
         """ Adds new vertex to the graph
@@ -74,14 +72,26 @@ class GraphMatrix(Graph):
         return str(self._adj_nodes)
 
     def __str__(self) -> str:
-        return ("{\n" +
-           "\n".join(
-               [f'"{name}" | {node_id}' + ": [" + ",".join(
-                   [str(vrtx) for vrtx in self.get_neighbors_out(node_id)]
-                   ) + "]" for name,node_id in self._name2node.items()]
-               )
-           + 
-        "\n}")
+        return (
+            "{\n"
+            + "\n".join(
+                [
+                    (
+                        (
+                            f'"{name}" | {node_id}: ['
+                            + ",".join(
+                                [
+                                    str(vrtx)
+                                    for vrtx in self.get_neighbors_out(node_id)
+                                ]
+                            )
+                        )
+                        + "]"
+                    )
+                    for name, node_id in self._name2node.items()
+                ]
+            )
+        ) + "\n}"
     
     def get_neighbors_out(self, vertex:int) -> list[int]:
         return [vrtx for vrtx, is_neighbour in enumerate(self[vertex]) if is_neighbour!=0]
@@ -115,14 +125,23 @@ class GraphAdjList(Graph):
         self._adj_nodes:list[list[int]] = []
 
     def __str__(self) -> str:
-        return ("{\n" +
-            "\n".join(
-                [f'"{name}"' + ": [" + ",".join(
-                    [str(edge) for edge in self._adj_nodes[node_id]]
-                    ) + "]" for name,node_id in self._name2node.items()]
-                )
-            + 
-        "\n}")
+        return (
+            "{\n"
+            + "\n".join(
+                [
+                    (
+                        (
+                            f'"{name}": ['
+                            + ",".join(
+                                [str(edge) for edge in self._adj_nodes[node_id]]
+                            )
+                        )
+                        + "]"
+                    )
+                    for name, node_id in self._name2node.items()
+                ]
+            )
+        ) + "\n}"
 
     def add_vertex(self, name: str) -> int:
         super()._base_add_vertex(name)
@@ -133,7 +152,7 @@ class GraphAdjList(Graph):
         self._adj_nodes[u].append(v)
 
     def reverse_edge(self, u:int, v:int) -> None:
-        if not u in self._adj_nodes[v]:
+        if u not in self._adj_nodes[v]:
             self._adj_nodes[v].append(u)
             self._adj_nodes[u].remove(v)
         else:

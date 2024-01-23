@@ -50,14 +50,12 @@ class Menu(State):
 
         if self.buttons[self.CMD_CHOOSE].is_clicked():
 
-            target_project_dir = self.resolver.find_directory()
-
-            if target_project_dir:
+            if target_project_dir := self.resolver.find_directory():
                 new_state = Scan(self.resolver, target_project_dir)
                 new_state.enter_state()
             else:
                 self.resolver.show_error("Project directory", "You haven't selected a project directory.")
-                
+
             self.resolver.focus()
 
         elif self.buttons[self.CMD_EXIT].is_clicked():

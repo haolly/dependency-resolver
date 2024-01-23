@@ -251,7 +251,7 @@ class World(State):
             for vtx_out in self.digraph.get_neighbors_out(node_id):
 
                 if (node_id, vtx_out) in self.reversed_edges:
-                    if not node_id in self.digraph.get_neighbors_out(vtx_out):
+                    if node_id not in self.digraph.get_neighbors_out(vtx_out):
                         continue
                 elif (vtx_out, node_id) in self.reversed_edges:
                     continue

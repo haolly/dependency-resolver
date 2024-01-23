@@ -71,7 +71,7 @@ class Scan(State):
                 self.digraph.safe_add_vertex(included_file)
 
                 # prevent files with improper includes or "self includes"
-                if not included_file == source_file:
+                if included_file != source_file:
                     self.digraph.add_edge(included_file, source_file)
 
         self.update_status("GRAPH", "Removing cycles and applying toposort...", colors.YELLOW)

@@ -105,9 +105,7 @@ class Button():
 
     def update(self, dt, mouse_x, mouse_y, is_clicked: bool, offset_x=0, offset_y=0):
         if self.__rect.collidepoint(mouse_x, mouse_y):
-            self.state = ClickableState.HOVERED
-            if is_clicked:
-                self.state = ClickableState.CLICKED
+            self.state = ClickableState.CLICKED if is_clicked else ClickableState.HOVERED
         else:
             self.state = ClickableState.IDLE
 

@@ -22,11 +22,14 @@ class DependencyScanner:
         """ Returns index that represents a file extension
         from SUPPORTED_FILES.
         """
-        for i, ext in enumerate(self.SUPPORTED_FILES):
-            if filename.endswith(ext):
-                return i
-
-        return -1
+        return next(
+            (
+                i
+                for i, ext in enumerate(self.SUPPORTED_FILES)
+                if filename.endswith(ext)
+            ),
+            -1,
+        )
 
     def get_project_files(self, start_dir:str) -> list[Tuple[str, int]]:
         project_files = []
@@ -70,15 +73,15 @@ class DependencyScanner:
         for i, (file, file_type) in enumerate(project_files):
 
             file = DependencyScanner.normalize_path(file)
-            
+
             # Report progress to the caller
             if self.__progress_cb:
                 self.__progress_cb(i, len(project_files), file.replace(path_dir, ""))
 
             includes = self.get_includes(file)
             dep_map[file] = includes
-        
-        self.glob_log.info(f"Scan complete!")
+
+        self.glob_log.info("Scan complete!")
 
         return dep_map
     
